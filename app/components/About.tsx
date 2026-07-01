@@ -25,7 +25,7 @@ export default function About() {
           </div>
 
           <div>
-            <h3 className="text-4xl font-bold text-yellow-500">5+</h3>
+            <h3 className="text-4xl font-bold text-yellow-500">15+</h3>
             <p>Years Experience</p>
           </div>
 

@@ -10,10 +10,22 @@ const projects = [
     image: "/projects/living-after.jpg",
   },
   {
-    title: "Modern Bedroom Design",
+    title: "Modern Living Room",
+    location: "Jaipur",
+    category: "Living Room",
+    image: "/projects/living2.jpg",
+  },
+  {
+    title: "Modern Bedroom",
     location: "Sikar",
     category: "Bedroom",
     image: "/projects/bedroom-after.jpg",
+  },
+  {
+    title: "Luxury Bedroom",
+    location: "Jaipur",
+    category: "Bedroom",
+    image: "/projects/bedroom2.jpg",
   },
   {
     title: "Modular Kitchen",
@@ -22,100 +34,75 @@ const projects = [
     image: "/projects/kitchen-after.jpg",
   },
   {
-    title: "Hotel interior",
+    title: "Premium Kitchen",
+    location: "Jaipur",
+    category: "Kitchen",
+    image: "/projects/kitchen2.jpg",
+  },
+  {
+    title: "Hotel Reception",
     location: "Khatushyam Ji",
-    category: "reception",
+    category: "Hotel Interior",
     image: "/projects/reception-after.jpg",
   },
 ];
 
-const categories = ["All", "Living Room", "Bedroom", "Kitchen", "Hotel interior"];
+const categories = [...new Set(projects.map((p) => p.category))];
 
 export default function Projects() {
-  const [active, setActive] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const filtered =
-    active === "All"
-      ? projects
-      : projects.filter((p) => p.category === active);
+  const filteredProjects = selectedCategory
+    ? projects.filter((p) => p.category === selectedCategory)
+    : [];
 
   return (
     <section className="bg-gradient-to-b from-gray-950 to-gray-900 text-white py-24 px-6">
+      <h2 className="text-5xl font-bold text-center">Our Premium Projects</h2>
 
-      {/* Heading */}
-      <h2 className="text-5xl font-bold text-center">
-        Our Premium Projects
-      </h2>
-
-      <p className="text-center text-gray-400 mt-3">
-        Elegant interiors crafted with precision & style
-      </p>
-
-      {/* Filters */}
-      <div className="flex justify-center gap-3 mt-8 flex-wrap">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActive(cat)}
-            className={`px-5 py-2 rounded-full text-sm transition ${
-              active === cat
-                ? "bg-white text-black"
-                : "bg-gray-800 text-white hover:bg-gray-700"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div className="max-w-6xl mx-auto mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((project, index) => (
-          <div
-            key={index}
-            className="group relative overflow-hidden rounded-2xl shadow-xl"
-          >
-            {/* Image */}
-            <img
-              src={project.image}
-              alt={project.title}
-              className="h-72 w-full object-cover group-hover:scale-110 transition duration-500"
-            />
-
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-            {/* Content */}
-            <div className="absolute bottom-0 p-5 text-white">
-              <h3 className="text-xl font-semibold">
-                {project.title}
-              </h3>
-              <p className="text-sm text-gray-300">
-                {project.location}
-              </p>
-
-              <span className="inline-block mt-2 text-xs px-3 py-1 bg-white text-black rounded-full">
-                {project.category}
-              </span>
+      {!selectedCategory ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-6xl mx-auto">
+          {categories.map((category) => (
+            <div
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className="cursor-pointer rounded-2xl bg-gray-800 p-8 text-center hover:bg-yellow-500 hover:text-black transition"
+            >
+              <div className="text-5xl mb-3">📁</div>
+              <h3 className="text-xl font-semibold">{category}</h3>
+              <p className="text-sm opacity-70 mt-2">View Projects</p>
             </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className="mt-8 mb-8 px-5 py-2 rounded-full bg-white text-black"
+          >
+            ← Back to Categories
+          </button>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project, index) => (
+              <div
+                key={index}
+                className="overflow-hidden rounded-2xl shadow-xl"
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-72 w-full object-cover"
+                />
+                <div className="p-5">
+                  <h3 className="text-xl font-semibold">{project.title}</h3>
+                  <p className="text-gray-400">{project.location}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
-      {/* CTA */}
-      <div className="text-center mt-16">
-        <h3 className="text-2xl font-semibold">
-          Want a similar luxury interior?
-        </h3>
-        <p className="text-gray-400 mt-2">
-          Let’s design your dream space together
-        </p>
-
-        <button className="mt-5 px-7 py-3 bg-white text-black rounded-full font-medium hover:scale-105 transition">
-          Get Free Consultation
-        </button>
-      </div>
-
+        </>
+      )}
     </section>
   );
 }
